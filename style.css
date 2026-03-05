@@ -1,0 +1,70 @@
+/* General body */
+body{
+  margin:0;
+  padding:0;
+  font-family: Arial, sans-serif;
+  color:white;
+  text-align:center;
+  background-image:url('background.jpg');
+  background-size:cover;
+  background-position:center;
+}
+
+/* Container card */
+.container{
+  background: rgba(0,0,0,0.8);
+  padding: 30px;
+  margin:50px auto;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+/* Header */
+h1{
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+/* Input box */
+#codeInput{
+  width: 85%;
+  padding: 15px;
+  font-size: 20px;
+  border-radius: 15px;
+  border: none;
+  margin-bottom: 20px;
+  text-align:center;
+}
+
+/* Result box */
+#result{
+  margin-top: 20px;
+  font-size: 18px;
+  background: rgba(0,0,0,0.6);
+  padding: 15px;
+  border-radius: 15px;
+  min-height: 60px;
+}
+
+/* Footer */
+.footer{
+  margin-top: 25px;
+  font-size:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+
+.whatsapp-icon{
+  width:18px;
+  height:18px;
+  vertical-align:middle;
+  transition: transform 0.2s;
+}
+
+.whatsapp-icon:hover{
+  transform: scale(1.2);
+}
