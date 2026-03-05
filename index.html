@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FACP Assistant</title>
+<style>
+body{
+  margin:0;
+  padding:0;
+  font-family: Arial, sans-serif;
+  color:white;
+  text-align:center;
+  background-image:url('background.jpg');
+  background-size:cover;
+  background-position:center;
+}
+
+.container{
+  background: rgba(0,0,0,0.8);
+  padding: 30px;
+  margin:50px auto;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+h1{
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+#codeInput{
+  width: 80%;
+  padding: 15px;
+  font-size: 20px;
+  border-radius: 15px;
+  border: none;
+  margin-bottom: 15px;
+  text-align:center;
+}
+
+#searchBtn{
+  padding: 12px 25px;
+  font-size: 18px;
+  border-radius: 15px;
+  border:none;
+  background-color:#00d4ff;
+  color:black;
+  cursor:pointer;
+}
+
+#searchBtn:hover{
+  background-color:#00b8e0;
+}
+
+#result{
+  margin-top: 20px;
+  font-size: 18px;
+  background: rgba(0,0,0,0.6);
+  padding: 15px;
+  border-radius: 15px;
+  min-height: 60px;
+}
+
+/* Footer */
+.footer{
+  margin-top: 25px;
+  font-size:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+
+.whatsapp-icon{
+  width:18px;
+  height:18px;
+  vertical-align:middle;
+  transition: transform 0.2s;
+}
+
+.whatsapp-icon:hover{
+  transform: scale(1.2);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>FACP Assistant</h1>
+
+  <input type="text" id="codeInput" placeholder="Type code here..." />
+  <button id="searchBtn">🔍 Search</button>
+
+  <div id="result">Result will appear here</div>
+</div>
+
+<div class="footer">
+  Made by Arsalan
+  <a href="https://wa.me/971565657738" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
+  </a>
+</div>
+
+<script>
+let csvData = [];
+let codeInput = document.getElementById("codeInput");
+let searchBtn = document.getElementById("searchBtn");
+let result = document.getElementById("result");
+
+// Load CSV
+fetch("data.csv")
+.then(res => res.text())
+.then(text => {
+    let rows = text.split("\n");
+    rows.forEach(r => {
+        let cols = r.split(",");
+        if(cols.length >= 2){
+            csvData.push(cols); // store full row
+        }
+    });
+})
+.catch(err => console.error("CSV Load Error:", err));
+
+// Clean text utility
+function cleanText(text){
+    return text.toUpperCase().replace(/[^A-Z0-9]/g,"");
+}
+
+// Search function
+function searchCode(){
+    let inputCode = cleanText(codeInput.value);
+    if(inputCode.length === 0){
+        result.innerHTML = "Please type a code to search";
+        return;
+    }
+
+    let found = false;
+    for(let i=0;i<csvData.length;i++){
+        let row = csvData[i];
+        let csvCode = cleanText(row[0]);
+        if(inputCode.includes(csvCode) || csvCode.includes(inputCode)){
+            result.innerHTML =
+            `<b>Code:</b> ${row[0]}<br>`+
+            `<b>Building:</b> ${row[1]}<br>`+
+            `<b>Floor:</b> ${row[2] || "Unknown"}<br>`+
+            `<b>Room:</b> ${row[3] || "Unknown"}<br>`+
+            `<b>Name:</b> ${row[4] || "Unknown"}`;
+            found = true;
+            break;
+        }
+    }
+
+    if(!found){
+        result.innerHTML = "❌ No Data Found";
+    }
+}
+
+// Button click
+searchBtn.addEventListener("click", searchCode);
+
+// Press Enter to search
+codeInput.addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        searchCode();
+    }
+});
+</script>
+</body>
+</html>
